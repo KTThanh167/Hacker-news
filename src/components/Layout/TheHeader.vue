@@ -2,7 +2,7 @@
 
 <template>
   <header class="bg-[#020420]">
-    <div class="w-full h-16 flex items-center container justify-between mx-auto">
+    <div class="max-w-4xl h-16 flex items-center container justify-around">
       <div class="flex gap-8 nav-links">
         <router-link to="/">News</router-link>
         <router-link to="/Newest">Newest</router-link>
