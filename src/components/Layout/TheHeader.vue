@@ -4,11 +4,11 @@
   <header class="bg-[#020420]">
     <div class="max-w-4xl h-16 flex items-center container justify-around">
       <div class="flex gap-8 nav-links">
-        <router-link to="/">News</router-link>
-        <router-link to="/Newest">Newest</router-link>
-        <router-link to="/Ask">Ask</router-link>
-        <router-link to="/Show">Show</router-link>
-        <router-link to="/Jobs">Jobs</router-link>
+        <router-link to="/news">News</router-link>
+        <router-link to="/newest">Newest</router-link>
+        <router-link to="/ask">Ask</router-link>
+        <router-link to="/show">Show</router-link>
+        <router-link to="/jobs">Jobs</router-link>
       </div>
       <div>
         <a href="https://github.com/nuxt/hackernews" class="text-white hover:text-green-300"
