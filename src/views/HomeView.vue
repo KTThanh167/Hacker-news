@@ -55,7 +55,7 @@ watch(page, fetchHackerNews)
   <!-- Body -->
   <div class="max-w-4xl container flex flex-col items-center">
     <!-- Phân trang -->
-    <div class="flex items-center self-center">
+    <div v-if="!isLoading" class="flex items-center self-center">
       <PaginationSession
         :currentPage="page"
         :totalPage="10"
@@ -90,5 +90,13 @@ watch(page, fetchHackerNews)
         </div>
       </li>
     </ul>
+    <!-- Phân trang -->
+    <div v-if="!isLoading" class="flex items-center self-center">
+      <PaginationSession
+        :currentPage="page"
+        :totalPage="10"
+        @changePage="(val: number) => (page = val)"
+      />
+    </div>
   </div>
 </template>
