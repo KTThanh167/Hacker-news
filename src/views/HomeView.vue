@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import http from '@/utils/axios-req'
 import TheHeader from '@/components/Layout/TheHeader.vue'
+import PaginationSession from '@/components/Layout/PaginationSession.vue'
 
 // Định nghĩa Interface (Nên để trên cùng)
 interface NewsItem {
@@ -47,17 +48,13 @@ watch(page, fetchHackerNews)
 
 <template>
   <TheHeader />
-  <div class="max-w-4xl mx-auto">
-    <div class="flex items-center gap-4 p-4 bg-gray-100">
-      <button
-        @click="page--"
-        :disabled="page <= 1"
-        class="border px-4 py-1 bg-white disabled:opacity-50 hover:bg-gray-50"
-      >
-        Trang trước
-      </button>
-      <span class="font-medium text-sm">Trang: {{ page }}</span>
-      <button @click="page++" class="border px-4 py-1 bg-white hover:bg-gray-50">Trang sau</button>
+  <div class="container">
+    <div class="flex items-center">
+      <PaginationSession
+        :currentPage="page"
+        :totalPage="10"
+        @changePage="(val: number) => (page = val)"
+      />
     </div>
 
     <div v-if="isLoading" class="p-4 text-orange-500 font-bold flex items-center gap-2">
