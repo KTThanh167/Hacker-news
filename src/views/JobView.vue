@@ -1,22 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, onUnmounted } from 'vue'
 import http from '@/utils/axios-req'
-import TheHeader from '@/components/Layout/TheHeader.vue'
 import PaginationSession from '@/components/Layout/PaginationSession.vue'
-import { timeAgo } from '@/utils/time'
 import { useRoute, useRouter } from 'vue-router'
+import NewItem from '@/components/Item/NewItem.vue'
 
 const route = useRoute()
 const router = useRouter()
 
-//Hàm đồng bộ URL khi page thay đổi
-const updateURL = () => {
-  router.push({
-    query: { ...route.query, page: page.value },
-  })
-}
-
-// Định nghĩa Interface
+//Định nghĩa Interface
 interface NewsItem {
   id: number
   title: string
@@ -37,48 +29,66 @@ const isLoading = ref(false)
 const fetchHackerNews = async () => {
   isLoading.value = true
   try {
-    const data = await http.get<unknown, NewsItem[]>('/feeds', {
+    const data = await http.get<unknown, NewsItem[]>('/feed', {
       params: {
-        feed: 'jobs',
-        page: page.value,
+        feed: 'job',
+        page: page.value + 1,
       },
     })
 
-    // Vì Interceptor đã gọt vỏ, data bây giờ chính là mảng tin tức
+    //Vì đã sử dụng Interceptor, data bây giờ chính là mảng dữ liệu
     newsList.value = data
-    // Tự động cuộn lên đầu trang khi page thay đổi
+    //Tự động cuộn lên đầu  trang khi page thay đổi
     window.scrollTo({ top: 0, behavior: 'smooth' })
     console.log('Dữ liệu nhận được:', newsList.value)
   } catch (error) {
-    console.error('Đã có lỗi xảy ra:', error)
+    console.error('Đã có lỗi xảy ra: ', error)
   } finally {
     isLoading.value = false
   }
 }
 
+//Hàm đồng bộ URL khi page thay đổi
+const updateURL = () => {
+  router.push({
+    query: { ...route.query, page: page.value },
+  })
+}
+
+//Hàm chuyển page bằng phím mũi tên
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'ArrowRight' && page.value < 10) {
+    page.value++
+  } else if (event.key === 'ArrowLeft' && page.value > 1) {
+    page.value--
+  }
+}
+
 onMounted(() => {
-  // Lấy page từ URL (ví dụ ?page=3), nếu không có thì mặc định là 1
+  //Lấy page từ URL, nếu không có thì mặc định là 1
   const pageFromQuery = Number(route.query.page)
   if (pageFromQuery && !isNaN(pageFromQuery)) {
     page.value = pageFromQuery
   }
+  window.addEventListener('keydown', handleKeydown)
   fetchHackerNews()
 })
+
+//Dọn dẹp sự kiện khi component bị hủy
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
+
 watch(page, () => {
-  updateURL() // Cập nhật URL thành ?page=x
+  updateURL() //Cập nhật URL thành ?page=x
   fetchHackerNews()
 })
 </script>
 
 <template>
-  <!-- Header -->
-  <div class="w-full">
-    <TheHeader />
-  </div>
-  <!-- Body -->
   <div class="max-w-4xl container flex flex-col items-center">
     <!-- Phân trang -->
-    <div v-if="!isLoading" class="flex items-center self-center">
+    <div class="flex items-center self-center">
       <PaginationSession
         :currentPage="page"
         :totalPage="1"
@@ -90,31 +100,11 @@ watch(page, () => {
       <span class="animate-spin text-xl">↻</span> Đang tải tin tức...
     </div>
     <!-- Content -->
-    <ul v-else class="p-4 divide-y divide-gray-200">
-      <li v-for="item in newsList" :key="item.id" class="py-3 flex items-center gap-7">
-        <div class="font-bold text-[#2e495e] min-w-[30px]">{{ item.points }}</div>
-        <div>
-          <a
-            :href="item.url"
-            target="_blank"
-            class="text-blue-700 font-semibold hover:underline block mb-1"
-          >
-            {{ item.title }}
-          </a>
-          <div class="text-xs text-gray-500 flex items-center gap-2">
-            <span>by</span>
-            <span class="hover:text-primary cursor-pointer">{{ item.user || 'N/A' }}</span>
-            <span>{{ timeAgo(item.time) }}</span>
-            <span>|</span>
-            <span class="hover:text-primary cursor-pointer">
-              {{ item.comments_count }} comments
-            </span>
-          </div>
-        </div>
-      </li>
+    <ul v-else class="p-4 divide-y divide-gray-200 shadow">
+      <NewItem v-for="item in newsList" :key="item.id" :item="item" />
     </ul>
     <!-- Phân trang -->
-    <div v-if="!isLoading" class="flex items-center self-center">
+    <div v-if="!isLoading" class="pt-4 flex items-center self-center">
       <PaginationSession
         :currentPage="page"
         :totalPage="1"
