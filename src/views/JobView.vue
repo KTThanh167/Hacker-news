@@ -107,7 +107,7 @@ watch(page, () => {
             <span>{{ timeAgo(item.time) }}</span>
             <span>|</span>
             <span class="hover:text-primary cursor-pointer">
-              {{ item.comments_count }} bình luận
+              {{ item.comments_count }} comments
             </span>
           </div>
         </div>
