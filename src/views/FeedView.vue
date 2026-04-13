@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, onUnmounted, computed } from 'vue'
 import http from '@/utils/axios-req'
-import TheHeader from '@/components/Layout/TheHeader.vue'
 import PaginationSession from '@/components/Layout/PaginationSession.vue'
 import { timeAgo } from '@/utils/time'
 import { useRoute, useRouter } from 'vue-router'
@@ -39,7 +38,7 @@ const fetchHackerNews = async () => {
         page: page.value,
       },
     })
-    // Vì Interceptor đã gọt vỏ, data bây giờ chính là mảng tin tức
+    // Vì đã sử dụng Interceptor, data bây giờ chính là mảng tin tức
     newsList.value = data
     // Tự động cuộn lên đầu trang khi page thay đổi
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -114,10 +113,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- Header -->
-  <div class="w-full">
-    <TheHeader />
-  </div>
   <!-- Body -->
   <div class="max-w-4xl container flex flex-col items-center">
     <!-- Phân trang -->
