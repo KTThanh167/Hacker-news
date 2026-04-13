@@ -4,6 +4,17 @@ import http from '@/utils/axios-req'
 import TheHeader from '@/components/Layout/TheHeader.vue'
 import PaginationSession from '@/components/Layout/PaginationSession.vue'
 import { timeAgo } from '@/utils/time'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+
+//Hàm đồng bộ URL khi page thay đổi
+const updateURL = () => {
+  router.push({
+    query: { ...route.query, page: page.value },
+  })
+}
 
 // Định nghĩa Interface
 interface NewsItem {
@@ -35,6 +46,8 @@ const fetchHackerNews = async () => {
 
     // Vì Interceptor đã gọt vỏ, data bây giờ chính là mảng tin tức
     newsList.value = data
+    // Tự động cuộn lên đầu trang khi page thay đổi
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     console.log('Dữ liệu nhận được:', newsList.value)
   } catch (error) {
     console.error('Đã có lỗi xảy ra:', error)
@@ -43,8 +56,18 @@ const fetchHackerNews = async () => {
   }
 }
 
-onMounted(fetchHackerNews)
-watch(page, fetchHackerNews)
+onMounted(() => {
+  // Lấy page từ URL (ví dụ ?page=3), nếu không có thì mặc định là 1
+  const pageFromQuery = Number(route.query.page)
+  if (pageFromQuery && !isNaN(pageFromQuery)) {
+    page.value = pageFromQuery
+  }
+  fetchHackerNews()
+})
+watch(page, () => {
+  updateURL() // Cập nhật URL thành ?page=x
+  fetchHackerNews()
+})
 </script>
 
 <template>
