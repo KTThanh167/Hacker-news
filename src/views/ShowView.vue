@@ -81,7 +81,7 @@ watch(page, () => {
     <div v-if="!isLoading" class="flex items-center self-center">
       <PaginationSession
         :currentPage="page"
-        :totalPage="10"
+        :totalPage="2"
         @changePage="(val: number) => (page = val)"
       />
     </div>
@@ -117,7 +117,7 @@ watch(page, () => {
     <div v-if="!isLoading" class="flex items-center self-center">
       <PaginationSession
         :currentPage="page"
-        :totalPage="10"
+        :totalPage="2"
         @changePage="(val: number) => (page = val)"
       />
     </div>
