@@ -7,12 +7,16 @@ const routes = [
     path: '/',
     component: MainLayout,
     children: [
-    {
-      path: '/:type', // Tham số động :type
-      name: 'feed',
-      component: () => import('@/views/FeedView.vue'),
-      props: true // Truyền tham số từ URL vào component như một Props
-    }
+      {
+        path: '', // Khi đường dẫn là "/"
+        redirect: '/news' // Tự động nhảy sang "/news"
+      },
+      {
+        path: '/:type',
+        name: 'feed',
+        component: () => import('@/views/FeedView.vue'),
+        props: true
+      }
     ]
   }
 ]

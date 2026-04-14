@@ -4,5 +4,5 @@ import TheHeader from '@/components/Layout/TheHeader.vue'
 
 <template>
   <TheHeader />
-  <router-view></router-view>
+  <router-view :key="$route.fullPath" />
 </template>
