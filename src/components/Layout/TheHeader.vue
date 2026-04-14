@@ -5,6 +5,7 @@
     <div class="max-w-4xl h-16 flex items-center container justify-around">
       <div class="flex gap-8 nav-links">
         <router-link to="/news">News</router-link>
+        <!-- <router-link to="/">News</router-link> -->
         <router-link to="/newest">Newest</router-link>
         <router-link to="/ask">Ask</router-link>
         <router-link to="/show">Show</router-link>
