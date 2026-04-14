@@ -34,11 +34,16 @@ const isLoading = ref(false)
 const fetchHackerNews = async () => {
   isLoading.value = true
   try {
-    // API HNPWA dùng cấu trúc: /news/1.json
-    const data = await http.get<unknown, NewsItem[]>(`/${feedType.value}/${page.value}.json`)
+    // 1. Kiểm tra logic tên loại tin tức (ví dụ đổi 'job' thành 'jobs' cho đúng API)
+    let type = feedType.value
+    if (type === 'job') type = 'jobs'
+
+    // 2. Gọi API (Bỏ dấu / ở đầu vì baseURL đã có thể xử lý hoặc để chắc chắn hơn)
+    const data = await http.get<unknown, NewsItem[]>(`${type}/${page.value}.json`)
 
     newsList.value = data
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    console.log('Check data:', data) // Thêm dòng này để kiểm tra ở Console F12
   } catch (error) {
     console.error('Lỗi fetch:', error)
   } finally {
