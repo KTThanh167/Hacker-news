@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { InternalAxiosRequestConfig, AxiosResponse, Axios } from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://hn.nuxt.dev/api/hn',
+  baseURL: import.meta.env.VITE_API_URL || 'https://hn.nuxt.dev/api/hn',
   timeout: 10000,
 });
 
