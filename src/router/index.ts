@@ -12,37 +12,37 @@ const routes = [
     path: '/',
     component: MainLayout,
     children: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/newest',
-      name: 'newest',
-      component: NewestView,
-    },
-    {
-      path: '/ask',
-      name: 'ask',
-      component: AskView,
-    },
-    {
-      path: '/show',
-      name: 'show',
-      component: ShowView,
-    },
-    {
-      path: '/jobs',
-      name: 'jobs',
-      component: JobView,
-    },
     // {
-    //   path: '/:type', // Tham số động :type
-    //   name: 'feed',
-    //   component: () => import('@/views/FeedView.vue'),
-    //   props: true // Truyền tham số từ URL vào component như một Props
-    // }
+    //   path: '/',
+    //   name: 'home',
+    //   component: HomeView,
+    // },
+    // {
+    //   path: '/newest',
+    //   name: 'newest',
+    //   component: NewestView,
+    // },
+    // {
+    //   path: '/ask',
+    //   name: 'ask',
+    //   component: AskView,
+    // },
+    // {
+    //   path: '/show',
+    //   name: 'show',
+    //   component: ShowView,
+    // },
+    // {
+    //   path: '/jobs',
+    //   name: 'jobs',
+    //   component: JobView,
+    // },
+    {
+      path: '/:type', // Tham số động :type
+      name: 'feed',
+      component: () => import('@/views/FeedView.vue'),
+      props: true // Truyền tham số từ URL vào component như một Props
+    }
     ]
   }
 ]

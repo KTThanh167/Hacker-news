@@ -2,8 +2,8 @@
 import { ref, onMounted, watch, onUnmounted, computed } from 'vue'
 import http from '@/utils/axios-req'
 import PaginationSession from '@/components/Layout/PaginationSession.vue'
-import { timeAgo } from '@/utils/time'
 import { useRoute, useRouter } from 'vue-router'
+import NewItem from '@/components/Item/NewItem.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -42,6 +42,7 @@ const fetchHackerNews = async () => {
     newsList.value = data
     // Tự động cuộn lên đầu trang khi page thay đổi
     window.scrollTo({ top: 0, behavior: 'smooth' })
+    console.log('Dữ liệu nhận được:', newsList.value)
   } catch (error) {
     console.error('Lỗi fetch:', error)
   } finally {
@@ -97,7 +98,7 @@ watch(page, () => {
 })
 
 onMounted(() => {
-  // Lấy page từ URL (ví dụ ?page=3), nếu không có thì mặc định là 1
+  // Lấy page từ URL, nếu không có thì mặc định là 1
   const pageFromQuery = Number(route.query.page)
   if (pageFromQuery && !isNaN(pageFromQuery)) {
     page.value = pageFromQuery
@@ -129,27 +130,7 @@ onUnmounted(() => {
     </div>
     <!-- Content -->
     <ul v-else class="p-4 divide-y divide-gray-200 shadow">
-      <li v-for="item in newsList" :key="item.id" class="py-3 flex items-center gap-7">
-        <div class="font-bold text-[#2e495e] min-w-[30px]">{{ item.points }}</div>
-        <div>
-          <a
-            :href="item.url"
-            target="_blank"
-            class="text-blue-700 font-semibold hover:underline block mb-1"
-          >
-            {{ item.title }}
-          </a>
-          <div class="text-xs text-gray-500 flex items-center gap-2">
-            <span>by</span>
-            <span class="hover:text-primary cursor-pointer">{{ item.user || 'N/A' }}</span>
-            <span>{{ timeAgo(item.time) }}</span>
-            <span>|</span>
-            <span class="hover:text-primary cursor-pointer">
-              {{ item.comments_count }} bình luận
-            </span>
-          </div>
-        </div>
-      </li>
+      <NewItem v-for="item in newsList" :key="item.id" :item="item" />
     </ul>
     <!-- Phân trang -->
     <div v-if="!isLoading" class="pt-4 flex items-center self-center">
