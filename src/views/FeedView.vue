@@ -34,17 +34,11 @@ const isLoading = ref(false)
 const fetchHackerNews = async () => {
   isLoading.value = true
   try {
-    const data = await http.get<unknown, NewsItem[]>('/feeds', {
-      params: {
-        feed: feedType.value, // Dùng biến feedType
-        page: page.value,
-      },
-    })
-    // Vì đã sử dụng Interceptor, data bây giờ chính là mảng tin tức
+    // API HNPWA dùng cấu trúc: /news/1.json
+    const data = await http.get<unknown, NewsItem[]>(`/${feedType.value}/${page.value}.json`)
+
     newsList.value = data
-    // Tự động cuộn lên đầu trang khi page thay đổi
     window.scrollTo({ top: 0, behavior: 'smooth' })
-    console.log('Dữ liệu nhận được:', newsList.value)
   } catch (error) {
     console.error('Lỗi fetch:', error)
   } finally {
