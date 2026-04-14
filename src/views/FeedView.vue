@@ -4,6 +4,7 @@ import http from '@/utils/axios-req'
 import PaginationSession from '@/components/Layout/PaginationSession.vue'
 import { useRoute, useRouter } from 'vue-router'
 import NewItem from '@/components/Item/NewItem.vue'
+import MenuAndScroll from '@/components/Item/MenuAndScroll.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -66,17 +67,8 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 }
 
-const feedConfigs: Record<string, { max: number }> = {
-  news: { max: 10 },
-  newest: { max: 12 },
-  ask: { max: 2 },
-  show: { max: 2 },
-  jobs: { max: 1 },
-}
-
 const maxPage = computed(() => {
-  const type = (route.params.type as string) || 'news'
-  return feedConfigs[type]?.max || 10
+  return 10
 })
 
 // Theo dõi sự thay đổi của URL (khi nhấn Menu)
@@ -125,15 +117,30 @@ onUnmounted(() => {
       />
     </div>
     <!-- Loading -->
-    <div v-if="isLoading" class="p-4 text-orange-500 font-bold flex items-center gap-2">
-      <span class="animate-spin text-xl">↻</span> Đang tải tin tức...
+    <div
+      v-if="isLoading"
+      class="w-full max-w-2xl p-4 bg-white shadow mt-4 divide-y divide-gray-100 flex flex-col gap-4"
+    >
+      <a-spin />
+      <div v-for="i in 10" :key="i" class="py-5">
+        <a-skeleton active :title="{ width: '80%' }" :paragraph="{ rows: 1, width: '40%' }" />
+      </div>
+    </div>
+    <!-- Trang trống không có dữ liệu -->
+    <div
+      v-else-if="newsList.length === 0"
+      class="w-full py-20 bg-white shadow mt-4 flex justify-center"
+    >
+      <a-empty description="Không tìm thấy tin tức nào" />
     </div>
     <!-- Content -->
     <ul v-else class="p-4 divide-y divide-gray-200 shadow">
       <NewItem v-for="item in newsList" :key="item.id" :item="item" />
     </ul>
+    <!-- Cuộn lên đầu trang và menu chuyển trang nhanh -->
+    <MenuAndScroll />
     <!-- Phân trang -->
-    <div v-if="!isLoading" class="pt-4 flex items-center self-center">
+    <div v-if="!isLoading && newsList.length > 0" class="pt-4 flex items-center self-center">
       <PaginationSession
         :currentPage="page"
         :totalPage="10"
