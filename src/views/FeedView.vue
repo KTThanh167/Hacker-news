@@ -4,7 +4,8 @@ import http from '@/utils/axios-req'
 import PaginationSession from '@/components/Layout/PaginationSession.vue'
 import { useRoute, useRouter } from 'vue-router'
 import NewItem from '@/components/Item/NewItem.vue'
-import MenuAndScroll from '@/components/Item/MenuAndScroll.vue'
+import FloatingMenu from '@/components/Item/FloatingMenu.vue'
+import ScrollToTop from '@/components/Item/ScrollToTop.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -138,7 +139,10 @@ onUnmounted(() => {
       <NewItem v-for="item in newsList" :key="item.id" :item="item" />
     </ul>
     <!-- Cuộn lên đầu trang và menu chuyển trang nhanh -->
-    <MenuAndScroll />
+    <div>
+      <FloatingMenu />
+      <ScrollToTop />
+    </div>
     <!-- Phân trang -->
     <div v-if="!isLoading && newsList.length > 0" class="pt-4 flex items-center self-center">
       <PaginationSession
