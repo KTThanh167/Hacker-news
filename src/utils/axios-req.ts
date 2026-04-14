@@ -18,7 +18,7 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 2.Response Interceptor: Gọt vỏ dữ liệu để Component dùng cho gọn
+// 2.Response Interceptor: Tự động xử lý lỗi 401 và trả về data trực tiếp
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     return response.data
